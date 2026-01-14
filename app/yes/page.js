@@ -103,6 +103,20 @@ export default function YesPage() {
                 priority
               />
             </a>
+            <a
+              href="/cake"
+              aria-label="Open Cake"
+              className="inline-block hover:scale-105 transitio-transform"
+            >
+              <Image
+                src="/Cake2.png"
+                alt="Cake"
+                width={150}
+                height={150}
+                className="select-none"
+                priority
+              />
+            </a>
           </div>
         </div>
       </section>

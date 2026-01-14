@@ -33,38 +33,34 @@ export default function AudioOnLoad() {
     };
   }, []);
 
-  // Try to autoplay on the home page with graceful fallback
+  // Autoplay immediately on app load; 
   useEffect(() => {
     const audio = audioRef.current;
     if (!audio) return;
-    if (pathname !== "/") return;
 
-    let cleanup = () => {};
+    let unmuteTimer;
 
     const attemptPlay = async () => {
+      audio.muted = true;
       try {
-        audio.muted = false;
         await audio.play();
         setIsPlaying(true);
+        // Unmute shortly after playback begins to keep autoplay allowed
+        unmuteTimer = window.setTimeout(() => {
+          audio.muted = false;
+        }, 150);
       } catch (err) {
-        // Autoplay likely blocked; resume on first user interaction
-        const resume = () => {
-          audio.play().then(() => {
-            setIsPlaying(true);
-          }).catch(() => {});
-        };
-        window.addEventListener("pointerdown", resume, { once: true });
-        window.addEventListener("keydown", resume, { once: true });
-        cleanup = () => {
-          window.removeEventListener("pointerdown", resume);
-          window.removeEventListener("keydown", resume);
-        };
+        // If autoplay still fails, keep banner visible so user can manually start
+        setIsVisible(true);
       }
     };
 
     attemptPlay();
-    return () => cleanup();
-  }, [pathname]);
+
+    return () => {
+      if (unmuteTimer) window.clearTimeout(unmuteTimer);
+    };
+  }, []);
 
   const togglePlay = () => {
     const audio = audioRef.current;

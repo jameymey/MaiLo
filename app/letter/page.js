@@ -1,5 +1,5 @@
 "use client";
 
 export default function LetterPage() {
-  return <div className="min-h-screen flex flex-col"></div>;
+  return <h1>Coming soon</h1>;
 }
