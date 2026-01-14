@@ -1,6 +1,4 @@
-import dynamic from "next/dynamic";
-
-const Cake = dynamic(() => import("../../components/Cake"), { ssr: false });
+import Cake from "../../components/Cake";
 
 export const metadata = {
   title: "Anniversary Cake 🎂",
