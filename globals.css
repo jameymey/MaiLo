@@ -1,0 +1,16 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+@font-face {
+  font-family: 'Myfont';
+  src: url('/fonts/Myfont-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+.header {
+    font-family: 'Poppins', sans-serif;
+}
