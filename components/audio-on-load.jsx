@@ -33,6 +33,40 @@ export default function AudioOnLoad() {
     };
   }, []);
 
+  // Resume music when navigating to different pages
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    // When page changes, ensure music continues playing
+    if (!audio.paused) {
+      return; // Already playing, do nothing
+    }
+
+    // If paused, resume playing
+    const resumePlay = async () => {
+      audio.muted = false;
+      try {
+        await audio.play();
+        setIsPlaying(true);
+      } catch (err) {
+        // Fallback: try muted first
+        audio.muted = true;
+        try {
+          await audio.play();
+          setIsPlaying(true);
+          setTimeout(() => {
+            audio.muted = false;
+          }, 100);
+        } catch (err2) {
+          // If still fails, do nothing
+        }
+      }
+    };
+
+    resumePlay();
+  }, [pathname]);
+
   // Autoplay immediately on app load; 
   useEffect(() => {
     const audio = audioRef.current;
