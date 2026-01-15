@@ -8,6 +8,7 @@ export default function AudioOnLoad() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const pathname = usePathname?.() ?? "/";
+  const hasInitialized = useRef(false);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -33,56 +34,23 @@ export default function AudioOnLoad() {
     };
   }, []);
 
-  // Resume music when navigating to different pages
+  // Autoplay immediately on app load only once
   useEffect(() => {
+    if (hasInitialized.current) return;
+
     const audio = audioRef.current;
     if (!audio) return;
 
-    // When page changes, ensure music continues playing
-    if (!audio.paused) {
-      return; // Already playing, do nothing
-    }
-
-    // If paused, resume playing
-    const resumePlay = async () => {
-      audio.muted = false;
-      try {
-        await audio.play();
-        setIsPlaying(true);
-      } catch (err) {
-        // Fallback: try muted first
-        audio.muted = true;
-        try {
-          await audio.play();
-          setIsPlaying(true);
-          setTimeout(() => {
-            audio.muted = false;
-          }, 100);
-        } catch (err2) {
-          // If still fails, do nothing
-        }
-      }
-    };
-
-    resumePlay();
-  }, [pathname]);
-
-  // Autoplay immediately on app load; 
-  useEffect(() => {
-    const audio = audioRef.current;
-    if (!audio) return;
-
+    hasInitialized.current = true;
     let unmuteTimer;
 
     const attemptPlay = async () => {
-      // Try to play unmuted first for better user experience
       audio.muted = false;
       try {
         await audio.play();
         setIsPlaying(true);
         setIsVisible(true);
       } catch (err) {
-        // If that fails, try muted then unmute
         audio.muted = true;
         try {
           await audio.play();
@@ -92,18 +60,34 @@ export default function AudioOnLoad() {
           }, 100);
           setIsVisible(true);
         } catch (err2) {
-          // If autoplay still fails, keep banner visible so user can manually start
           setIsVisible(true);
         }
       }
     };
 
-    attemptPlay();
+    // Small delay to ensure audio element is ready
+    setTimeout(attemptPlay, 100);
 
     return () => {
       if (unmuteTimer) window.clearTimeout(unmuteTimer);
     };
   }, []);
+
+  // Ensure audio keeps playing when navigating pages
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !hasInitialized.current) return;
+
+    // Delay to let page transition complete
+    const timeout = setTimeout(() => {
+      if (audio.paused) {
+        audio.muted = false;
+        audio.play().then(() => setIsPlaying(true)).catch(() => {});
+      }
+    }, 100);
+
+    return () => clearTimeout(timeout);
+  }, [pathname]);
 
   const togglePlay = () => {
     const audio = audioRef.current;
