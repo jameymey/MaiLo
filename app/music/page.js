@@ -19,7 +19,7 @@ export default function MusicPage() {
           backgroundSize: "100% 100%",
         }}
       >
-        <div className="absolute top-4 left-4">
+        <div className="absolute top-4 left-4 z-[100]">
           <Button
             variant="link"
             className="px-0 font-normal text-[clamp(1rem,2.5vw,1.5rem)] text-[#1f324f] hover:no-underline"

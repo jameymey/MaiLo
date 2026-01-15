@@ -41,17 +41,26 @@ export default function AudioOnLoad() {
     let unmuteTimer;
 
     const attemptPlay = async () => {
-      audio.muted = true;
+      // Try to play unmuted first for better user experience
+      audio.muted = false;
       try {
         await audio.play();
         setIsPlaying(true);
-        // Unmute shortly after playback begins to keep autoplay allowed
-        unmuteTimer = window.setTimeout(() => {
-          audio.muted = false;
-        }, 150);
-      } catch (err) {
-        // If autoplay still fails, keep banner visible so user can manually start
         setIsVisible(true);
+      } catch (err) {
+        // If that fails, try muted then unmute
+        audio.muted = true;
+        try {
+          await audio.play();
+          setIsPlaying(true);
+          unmuteTimer = window.setTimeout(() => {
+            audio.muted = false;
+          }, 100);
+          setIsVisible(true);
+        } catch (err2) {
+          // If autoplay still fails, keep banner visible so user can manually start
+          setIsVisible(true);
+        }
       }
     };
 
@@ -91,10 +100,11 @@ export default function AudioOnLoad() {
         src="/audio/Green Day - Last Night on Earth.mp3"
         muted={false}
         autoPlay
+        loop
         playsInline
         preload="auto"
-          onPlay={() => setIsPlaying(true)}
-          onPause={() => setIsPlaying(false)}
+        onPlay={() => setIsPlaying(true)}
+        onPause={() => setIsPlaying(false)}
       />
       {isVisible && (
         <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
