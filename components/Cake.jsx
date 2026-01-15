@@ -266,24 +266,11 @@ export default function Cake() {
           </h1>
           
           <p 
-            className="text-xl md:text-2xl mb-12"
+            className="text-xl md:text-2xl mb-20"
             style={{ color: '#1f324f', fontFamily: "'Myfont'" }}
           >
             Blow out the candle to reveal your surprise
           </p>
-          
-          <button 
-            id="start" 
-            onClick={start}
-            className="px-8 py-4 rounded-xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 mb-16"
-            style={{ 
-              backgroundColor: '#1f324f', 
-              color: 'white',
-              fontFamily: "'Myfont'"
-            }}
-          >
-            Enable Microphone
-          </button>
           
           <div id="cake-holder" className={done ? 'done' : ''} style={{ opacity: micOn ? 1 : 0.3, transition: 'opacity 0.5s ease' }}>
             <div className="cake">
@@ -295,11 +282,10 @@ export default function Cake() {
               <div className="drip drip1"></div>
               <div className="drip drip2"></div>
               <div className="drip drip3"></div>
-              <div className="candle">
-                <div className="flame"></div>
-              </div>
+              <div className="candle">3</div>
+              <div className="flame"></div>
             </div>
-            <div className="text-center mt-64">
+            <div className="text-center mt-40">
               <h2 
                 className={`cake-off text-4xl md:text-5xl font-bold ${cormorant.className}`}
                 style={{ color: '#1f324f' }}
@@ -307,10 +293,23 @@ export default function Cake() {
                 Happy Anniversary, Baby
               </h2>
               <p className="cake-off text-xl mt-4" style={{ color: '#1f324f', fontFamily: "'Myfont'" }}>
-                Your wish came true 💗
+                You Are My Favorite Prayer Answered💗
               </p>
             </div>
           </div>
+
+          <button 
+            id="start" 
+            onClick={start}
+            className="px-8 py-4 rounded-xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 mt-16"
+            style={{ 
+              backgroundColor: '#1f324f', 
+              color: 'white',
+              fontFamily: "'Myfont'"
+            }}
+          >
+            Enable Microphone
+          </button>
         </div>
       </div>
       <Footer />
@@ -340,25 +339,23 @@ export default function Cake() {
         .drip3 { top: 54px; left: 90px; width: 80px; border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; }
         .candle { 
           position: absolute;
-          top: -65px; 
+          top: -45px; 
           left: 50%; 
           margin-left: -20px; 
           z-index: 10;
           width: 40px;
-          height: 60px;
-          font-size: 70px;
+          height: 50px;
+          font-size: 60px;
           font-weight: bold;
           color: #d4a373;
           text-shadow: 2px 2px 4px rgba(31,50,79,0.3);
           font-family: Arial, sans-serif;
+          display: flex;
+          align-items: center;
+          justify-content: center;
         }
-        .candle:before { 
-          content: "3";
-          position: absolute;
-          top: 0;
-          left: 0;
-        }
-        .flame { position: absolute; background: linear-gradient(to top, #ff6b35, #f7931e, #fdc830); width: 15px; height: 35px; border-radius: 10px 10px 10px 10px / 25px 25px 10px 10px; top: -25px; left: 50%; margin-left: -7.5px; z-index: 10; box-shadow: 0 0 10px rgba(255,165,0,0.5), 0 0 20px rgba(255,165,0,0.5), 0 0 60px rgba(255,165,0,0.5), 0 0 80px rgba(255,165,0,0.5); transform-origin: 50% 90%; animation: flicker 1s ease-in-out alternate infinite; }
+        .candle:before { content: none; }
+        .flame { position: absolute; background: linear-gradient(to top, #ff6b35, #f7931e, #fdc830); width: 15px; height: 35px; border-radius: 10px 10px 10px 10px / 25px 25px 10px 10px; top: -70px; left: 50%; margin-left: -7.5px; z-index: 11; box-shadow: 0 0 10px rgba(255,165,0,0.5), 0 0 20px rgba(255,165,0,0.5), 0 0 60px rgba(255,165,0,0.5), 0 0 80px rgba(255,165,0,0.5); transform-origin: 50% 90%; animation: flicker 1s ease-in-out alternate infinite; }
         @keyframes flicker {
           0% { transform: skewX(5deg); box-shadow: 0 0 10px rgba(255,165,0,0.2), 0 0 20px rgba(255,165,0,0.2), 0 0 60px rgba(255,165,0,0.2), 0 0 80px rgba(255,165,0,0.2); }
           25% { transform: skewX(-5deg); box-shadow: 0 0 10px rgba(255,165,0,0.5), 0 0 20px rgba(255,165,0,0.5), 0 0 60px rgba(255,165,0,0.5), 0 0 80px rgba(255,165,0,0.5); }

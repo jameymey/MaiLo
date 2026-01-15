@@ -74,6 +74,14 @@ export default function AudioOnLoad() {
     }
   };
 
+  const restartAudio = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+    audio.currentTime = 0;
+    audio.muted = false;
+    audio.play().then(() => setIsPlaying(true)).catch(() => {});
+  };
+
   const closeBanner = () => setIsVisible(false);
 
   return (
@@ -100,6 +108,14 @@ export default function AudioOnLoad() {
               style={{ backgroundColor: "#1f324f", fontFamily: "'Myfont'" }}
             >
               {isPlaying ? "Pause" : "Play"}
+            </button>
+            <button
+              onClick={restartAudio}
+              className="px-3 py-1 rounded-full text-white"
+              style={{ backgroundColor: "#1f324f", fontFamily: "'Myfont'" }}
+              title="Play from the top"
+            >
+              Restart
             </button>
             <button
               onClick={closeBanner}
