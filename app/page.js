@@ -195,11 +195,16 @@ export default function Home() {
 
           {/* Image grid */}
           <div className="mt-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
-            {[1, 2, 3, 4].map((num) => (
-              <div key={num} className="relative h-[420px] w-full">
+            {[
+              "/MaiLo-1.JPG",
+              "/MaiLo-2.jpg",
+              "/MaiLo-3.jpg",
+              "/MaiLo-4.JPG",
+            ].map((src, idx) => (
+              <div key={src} className="relative h-[420px] w-full">
                 <Image
-                  src={`/MaiLo-${num}.jpg`}
-                  alt={`MaiLo memory ${num}`}
+                  src={src}
+                  alt={`MaiLo memory ${idx + 1}`}
                   fill
                   className="object-cover rounded-xl shadow-lg"
                 />

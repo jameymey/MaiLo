@@ -268,7 +268,7 @@ export default function Cake() {
         </div>
         <div className="text-center">
           <h5 className="cake-off">Happy Anniversary, Baby</h5>
-          <p className="cake-off">❤ Wish you best ❤</p>
+          <p className="cake-off"></p>
         </div>
       </div>
 
