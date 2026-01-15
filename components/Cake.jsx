@@ -1,6 +1,14 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import { Cormorant_Garamond } from 'next/font/google'
+import Header from './header'
+import Footer from './footer'
+
+const cormorant = Cormorant_Garamond({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+})
 
 // Config (tweak as needed)
 const SAMPLE_POLLING_MSECS = 50
@@ -245,56 +253,112 @@ export default function Cake() {
   }
 
   return (
-    <div className="text-center">
-      <h1>Birthday Cake 🎂</h1>
-      <br />
-      <button id="start" onClick={start}>START (required on Chrome)</button>
-      <button id="startconsoledebug" style={{ display: 'none' }} onClick={() => setDebug(true)}>enable console logs</button>
-      <button id="stopconsoledebug" style={{ display: 'none' }} onClick={() => setDebug(false)}>disable console logs</button>
-      <br /><br />
-      <div id="cake-holder" className={done ? 'done' : ''} style={{ opacity: micOn ? 1 : 0 }}>
-        <div className="cake">
-          <div className="plate"></div>
-          <div className="layer layer-bottom"></div>
-          <div className="layer layer-middle"></div>
-          <div className="layer layer-top"></div>
-          <div className="icing"></div>
-          <div className="drip drip1"></div>
-          <div className="drip drip2"></div>
-          <div className="drip drip3"></div>
-          <div className="candle">
-            <div className="flame"></div>
+    <div className="min-h-screen bg-white">
+      <Header />
+      <div className="relative min-h-screen flex flex-col items-center justify-center px-6 pt-20">
+        <div className="grid-background z-0" />
+        <div className="relative z-10 text-center max-w-4xl mx-auto">
+          <h1 
+            className={`text-6xl md:text-7xl font-bold mb-8 ${cormorant.className}`}
+            style={{ color: '#1f324f' }}
+          >
+            Make a Wish 🎂
+          </h1>
+          
+          <p 
+            className="text-xl md:text-2xl mb-12"
+            style={{ color: '#1f324f', fontFamily: "'Myfont'" }}
+          >
+            Blow out the candle to reveal your surprise
+          </p>
+          
+          <button 
+            id="start" 
+            onClick={start}
+            className="px-8 py-4 rounded-xl text-lg font-semibold shadow-lg hover:shadow-xl transition-all duration-300 mb-16"
+            style={{ 
+              backgroundColor: '#1f324f', 
+              color: 'white',
+              fontFamily: "'Myfont'"
+            }}
+          >
+            Enable Microphone
+          </button>
+          
+          <div id="cake-holder" className={done ? 'done' : ''} style={{ opacity: micOn ? 1 : 0.3, transition: 'opacity 0.5s ease' }}>
+            <div className="cake">
+              <div className="plate"></div>
+              <div className="layer layer-bottom"></div>
+              <div className="layer layer-middle"></div>
+              <div className="layer layer-top"></div>
+              <div className="icing"></div>
+              <div className="drip drip1"></div>
+              <div className="drip drip2"></div>
+              <div className="drip drip3"></div>
+              <div className="candle">
+                <div className="flame"></div>
+              </div>
+            </div>
+            <div className="text-center mt-64">
+              <h2 
+                className={`cake-off text-4xl md:text-5xl font-bold ${cormorant.className}`}
+                style={{ color: '#1f324f' }}
+              >
+                Happy Anniversary, Baby
+              </h2>
+              <p className="cake-off text-xl mt-4" style={{ color: '#1f324f', fontFamily: "'Myfont'" }}>
+                Your wish came true 💗
+              </p>
+            </div>
           </div>
         </div>
-        <div className="text-center">
-          <h5 className="cake-off">Happy Anniversary, Baby</h5>
-          <p className="cake-off"></p>
-        </div>
       </div>
+      <Footer />
 
       <style jsx>{`
-        :global(body) { font-size: 18px; font-family: courier, monospace; background-color: black; color: white; }
-        button { font-size: 18px; font-family: courier, monospace; color: black; background-color: white; border: none; padding: 15px 32px; text-align: center; display: inline-block; }
-        #start { background-color: green; color: white; }
-        #startconsoledebug { background-color: yellow; }
-        #stopconsoledebug { background-color: orange; }
-        .text-center { text-align: center; }
-        .cake { position: absolute; width: 250px; height: 200px; top: 50%; left: 50%; margin-top: -70px; margin-left: -125px; }
-        .plate { width: 270px; height: 110px; position: absolute; bottom: -10px; left: -10px; background-color: #ccc; border-radius: 50%; box-shadow: 0 2px 0 #b3b3b3, 0 4px 0 #b3b3b3, 0 5px 40px rgba(0,0,0,0.5); }
+        .grid-background {
+          position: fixed;
+          inset: 0;
+          background-image: 
+            linear-gradient(rgba(31, 50, 79, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(31, 50, 79, 0.03) 1px, transparent 1px);
+          background-size: 50px 50px;
+          pointer-events: none;
+        }
+        .cake { position: relative; width: 250px; height: 200px; margin: 0 auto; }
+        .plate { width: 270px; height: 110px; position: absolute; bottom: -10px; left: -10px; background-color: #e8e8e8; border-radius: 50%; box-shadow: 0 2px 0 #d0d0d0, 0 4px 0 #d0d0d0, 0 5px 30px rgba(31,50,79,0.15); }
         .cake > * { position: absolute; }
-        .layer { display: block; width: 250px; height: 100px; border-radius: 50%; background-color: #553c13; box-shadow: 0 2px 0px #6a4b18, 0 4px 0px #33240b, 0 6px 0px #32230b, 0 8px 0px #31230b, 0 10px 0px #30220b, 0 12px 0px #2f220b, 0 14px 0px #2f210a, 0 16px 0px #2e200a, 0 18px 0px #2d200a, 0 20px 0px #2c1f0a, 0 22px 0px #2b1f0a, 0 24px 0px #2a1e09, 0 26px 0px #2a1d09, 0 28px 0px #291d09, 0 30px 0px #281c09; }
+        .layer { display: block; width: 250px; height: 100px; border-radius: 50%; background-color: #8b6f47; box-shadow: 0 2px 0px #a0825a, 0 4px 0px #6a5438, 0 6px 0px #695338, 0 8px 0px #685238, 0 10px 0px #675138, 0 12px 0px #665038, 0 14px 0px #654f37, 0 16px 0px #644e37, 0 18px 0px #634e37, 0 20px 0px #624d37, 0 22px 0px #614d37, 0 24px 0px #604c36, 0 26px 0px #5f4b36, 0 28px 0px #5e4b36, 0 30px 0px #5d4a36; }
         .layer-top { top: 0px; }
         .layer-middle { top: 33px; }
         .layer-bottom { top: 66px; }
-        .icing { top: 2px; left: 5px; background-color: #f0e4d0; width: 240px; height: 90px; border-radius: 50%; }
-        .icing:before { content: ""; position: absolute; top: 4px; right: 5px; bottom: 6px; left: 5px; background-color: #f4ebdc; box-shadow: 0 0 4px #f6efe3, 0 0 4px #f6efe3, 0 0 4px #f6efe3; border-radius: 50%; z-index: 1; }
-        .drip { display: block; width: 50px; height: 60px; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; background-color: #f0e4d0; }
+        .icing { top: 2px; left: 5px; background-color: #fff5f0; width: 240px; height: 90px; border-radius: 50%; }
+        .icing:before { content: ""; position: absolute; top: 4px; right: 5px; bottom: 6px; left: 5px; background-color: #fffaf7; box-shadow: 0 0 4px #ffffff, 0 0 4px #ffffff, 0 0 4px #ffffff; border-radius: 50%; z-index: 1; }
+        .drip { display: block; width: 50px; height: 60px; border-bottom-left-radius: 25px; border-bottom-right-radius: 25px; background-color: #fff5f0; }
         .drip1 { top: 53px; left: 5px; transform: skewY(15deg); height: 48px; width: 40px; }
         .drip2 { top: 69px; left: 181px; transform: skewY(-15deg); }
         .drip3 { top: 54px; left: 90px; width: 80px; border-bottom-left-radius: 40px; border-bottom-right-radius: 40px; }
-        .candle { background-color: #7b020b; width: 16px; height: 50px; border-radius: 8px / 4px; top: -20px; left: 50%; margin-left: -8px; z-index: 10; }
-        .candle:before { content: ""; position: absolute; top: 0; left: 0; width: 16px; height: 8px; border-radius: 50%; background-color: #ad030f; }
-        .flame { position: absolute; background-color: orange; width: 15px; height: 35px; border-radius: 10px 10px 10px 10px / 25px 25px 10px 10px; top: -34px; left: 50%; margin-left: -7.5px; z-index: 10; box-shadow: 0 0 10px rgba(255,165,0,0.5), 0 0 20px rgba(255,165,0,0.5), 0 0 60px rgba(255,165,0,0.5), 0 0 80px rgba(255,165,0,0.5); transform-origin: 50% 90%; animation: flicker 1s ease-in-out alternate infinite; }
+        .candle { 
+          position: absolute;
+          top: -65px; 
+          left: 50%; 
+          margin-left: -20px; 
+          z-index: 10;
+          width: 40px;
+          height: 60px;
+          font-size: 70px;
+          font-weight: bold;
+          color: #d4a373;
+          text-shadow: 2px 2px 4px rgba(31,50,79,0.3);
+          font-family: Arial, sans-serif;
+        }
+        .candle:before { 
+          content: "3";
+          position: absolute;
+          top: 0;
+          left: 0;
+        }
+        .flame { position: absolute; background: linear-gradient(to top, #ff6b35, #f7931e, #fdc830); width: 15px; height: 35px; border-radius: 10px 10px 10px 10px / 25px 25px 10px 10px; top: -25px; left: 50%; margin-left: -7.5px; z-index: 10; box-shadow: 0 0 10px rgba(255,165,0,0.5), 0 0 20px rgba(255,165,0,0.5), 0 0 60px rgba(255,165,0,0.5), 0 0 80px rgba(255,165,0,0.5); transform-origin: 50% 90%; animation: flicker 1s ease-in-out alternate infinite; }
         @keyframes flicker {
           0% { transform: skewX(5deg); box-shadow: 0 0 10px rgba(255,165,0,0.2), 0 0 20px rgba(255,165,0,0.2), 0 0 60px rgba(255,165,0,0.2), 0 0 80px rgba(255,165,0,0.2); }
           25% { transform: skewX(-5deg); box-shadow: 0 0 10px rgba(255,165,0,0.5), 0 0 20px rgba(255,165,0,0.5), 0 0 60px rgba(255,165,0,0.5), 0 0 80px rgba(255,165,0,0.5); }
