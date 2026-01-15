@@ -71,10 +71,10 @@ export default function YesPage() {
               />
             </a>
 
-            <a
-              href="/music"
+            <button
+              onClick={() => router.push("/music")}
               aria-label="Play Music surprise"
-              className="inline-block hover:scale-105 transition-transform"
+              className="inline-block hover:scale-105 transition-transform bg-none border-none cursor-pointer p-0"
             >
               <Image
                 src="/Music.png"
@@ -84,12 +84,12 @@ export default function YesPage() {
                 className="select-none"
                 priority
               />
-            </a>
+            </button>
 
-            <a
-              href="/puzzle"
+            <button
+              onClick={() => router.push("/puzzle")}
               aria-label="Open Puzzle Quiz"
-              className="inline-block hover:scale-105 transition-transform"
+              className="inline-block hover:scale-105 transition-transform bg-none border-none cursor-pointer p-0"
             >
               <Image
                 src="/Quiz.png"
@@ -99,11 +99,11 @@ export default function YesPage() {
                 className="select-none"
                 priority
               />
-            </a>
-            <a
-              href="/letter"
+            </button>
+            <button
+              onClick={() => router.push("/letter")}
               aria-label="Open Letter"
-              className="inline-block hover:scale-105 transitio-transform"
+              className="inline-block hover:scale-105 transition-transform bg-none border-none cursor-pointer p-0"
             >
               <Image
                 src="/Letter.png"
@@ -113,11 +113,11 @@ export default function YesPage() {
                 className="select-none"
                 priority
               />
-            </a>
-            <a
-              href="/cake"
+            </button>
+            <button
+              onClick={() => router.push("/cake")}
               aria-label="Open Cake"
-              className="inline-block hover:scale-105 transitio-transform"
+              className="inline-block hover:scale-105 transition-transform bg-none border-none cursor-pointer p-0"
             >
               <Image
                 src="/Cake2.png"
@@ -127,7 +127,7 @@ export default function YesPage() {
                 className="select-none"
                 priority
               />
-            </a>
+            </button>
           </div>
         </div>
       </section>

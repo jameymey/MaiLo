@@ -9,6 +9,7 @@ export default function AudioOnLoad() {
   const [isVisible, setIsVisible] = useState(true);
   const pathname = usePathname?.() ?? "/";
   const hasInitialized = useRef(false);
+  const savedTimeRef = useRef(0);
 
   useEffect(() => {
     const audio = audioRef.current;
@@ -31,6 +32,45 @@ export default function AudioOnLoad() {
     return () => {
       window.removeEventListener("mailo:play-audio", onPlayEvent);
       window.removeEventListener("mailo:pause-audio", onPauseEvent);
+    };
+  }, []);
+
+  // Save current time whenever it changes
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio || !hasInitialized.current) return;
+
+    const handleTimeUpdate = () => {
+      savedTimeRef.current = audio.currentTime;
+      console.log("Saved audio time on timeupdate:", savedTimeRef.current);
+    };
+
+    const handlePlay = () => {
+      savedTimeRef.current = audio.currentTime;
+      console.log("Saved audio time on play:", savedTimeRef.current);
+    };
+
+    const handlePause = () => {
+      savedTimeRef.current = audio.currentTime;
+      console.log("Saved audio time on pause:", savedTimeRef.current);
+    };
+
+    // Save time before page unload/navigation
+    const handleBeforeUnload = () => {
+      savedTimeRef.current = audio.currentTime;
+      console.log("Saved audio time before unload:", savedTimeRef.current);
+    };
+
+    audio.addEventListener("timeupdate", handleTimeUpdate);
+    audio.addEventListener("play", handlePlay);
+    audio.addEventListener("pause", handlePause);
+    window.addEventListener("beforeunload", handleBeforeUnload);
+
+    return () => {
+      audio.removeEventListener("timeupdate", handleTimeUpdate);
+      audio.removeEventListener("play", handlePlay);
+      audio.removeEventListener("pause", handlePause);
+      window.removeEventListener("beforeunload", handleBeforeUnload);
     };
   }, []);
 
@@ -78,15 +118,49 @@ export default function AudioOnLoad() {
     const audio = audioRef.current;
     if (!audio || !hasInitialized.current) return;
 
+    // Save time immediately before checking pathname change
+    savedTimeRef.current = audio.currentTime;
+
+    console.log("Page changed to:", pathname, "Audio paused?", audio.paused, "Saved time:", savedTimeRef.current);
+
     // Delay to let page transition complete
     const timeout = setTimeout(() => {
       if (audio.paused) {
+        console.log("Attempting to resume audio, currentTime:", audio.currentTime, "savedTime:", savedTimeRef.current);
+        
+        // Restore the saved time if audio was reset to 0
+        if (audio.currentTime === 0 && savedTimeRef.current > 0) {
+          audio.currentTime = savedTimeRef.current;
+          console.log("Restored audio time to:", savedTimeRef.current);
+        }
+        
+        audio.muted = false;
+        audio.play().then(() => {
+          console.log("Audio resumed successfully, playing:", !audio.paused, "at time:", audio.currentTime);
+          setIsPlaying(true);
+        }).catch((err) => {
+          console.log("Failed to resume audio:", err);
+        });
+      } else {
+        console.log("Audio is already playing");
+      }
+    }, 50);
+
+    // Also handle visibility change (when user comes back to tab)
+    const handleVisibilityChange = () => {
+      if (!document.hidden && audio.paused) {
+        console.log("Page became visible, resuming audio");
         audio.muted = false;
         audio.play().then(() => setIsPlaying(true)).catch(() => {});
       }
-    }, 100);
+    };
 
-    return () => clearTimeout(timeout);
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      clearTimeout(timeout);
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
   }, [pathname]);
 
   const togglePlay = () => {
@@ -117,7 +191,6 @@ export default function AudioOnLoad() {
         ref={audioRef}
         src="/audio/Green Day - Last Night on Earth.mp3"
         muted={false}
-        autoPlay
         loop
         playsInline
         preload="auto"
